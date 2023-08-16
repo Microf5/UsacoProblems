@@ -1,1 +1,53 @@
-
+#include <iostream>
+#include <vector>
+#include <climits>
+#include <set>
+#include <queue>
+#include <climits>
+#include <cstring>
+#include <algorithm>
+#include <fstream>
+using namespace std;
+bool comp(int x, int y){
+    return x > y;
+}
+int main() {
+    ifstream fin("cardgame.in");
+    ofstream fout("cardgame.out");
+    int n;
+    fin >> n;
+    vector<int> bessie(n),elsie(n);
+    set<int> avail;
+    for(int i = 0; i < 2*n; i++)avail.insert(i+1);
+    for(int i = 0; i < n; i++){
+        fin >> elsie[i];
+        avail.erase(elsie[i]);
+    }
+    auto k = avail.begin();
+    for(int i = 0; i < n; i++){
+        bessie[i] = *k; k++;
+    }
+    sort(elsie.begin(),elsie.begin()+n/2);
+    sort(elsie.begin()+n/2,elsie.end());
+    rotate(bessie.begin(),bessie.begin()+n/2,bessie.end());
+    int j = 0;
+    int ans = 0;
+    for(int i = 0; i < n/2; i++){
+        while(j<n/2 && elsie[i]>bessie[j]){
+            j++;
+        }
+        if(j==n/2)break;
+        ans++;
+        j++;
+    }
+    j = n-1;
+    for(int i = n-1; i >= n/2; i--){
+        while(j>=n/2 && elsie[i]<bessie[j]){
+            j--;
+        }
+        if(j==n/2-1)break;
+        ans++;
+        j--;
+    }
+    fout << ans << endl;
+}
